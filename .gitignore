@@ -26,7 +26,15 @@
 *.a
 *.lib
 
+
 # Executables
 *.exe
 *.out
 *.app
+*.a
+
+# VS
+*.vs*
+
+*.idea
+*.bak
