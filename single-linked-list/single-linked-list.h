@@ -139,17 +139,27 @@ class SingleLinkedList
 	};
 
 	template <typename Container>
-	void CopyFromValues(SingleLinkedList& tmp, Container& source)
+	void CopyFromValues(SingleLinkedList& dest, Container& source)
 	{
-		std::vector<Type> temp(source.begin(), source.end());
-
-		auto rbegin = temp.rbegin();
-		auto rend = temp.rend();
-
-		while (rbegin != rend)
+		auto iter = source.begin();
+		const auto end = source.end();
+    
+		if (iter != end)
 		{
-			tmp.PushFront(*rbegin);
-			rbegin = std::next(rbegin);
+			dest.head_.next_node = new Node(*iter, nullptr);
+			int size = 1;
+			iter = std::next(iter);
+	        
+			Node *last = dest.head_.next_node;
+	        
+			while (iter != end)
+			{
+				last->next_node = new Node(*iter, nullptr);
+				++size;
+				last = last->next_node;
+				iter = std::next(iter);
+			}
+			dest.size_ = size;
 		}
 	}
 public:
@@ -303,13 +313,18 @@ public:
 		head_.next_node = new Node(value, head_.next_node);
 		++size_;
 	}
+	
 	void PopFront() noexcept
 	{
-		Node* tmp = head_.next_node;
-		head_.next_node = tmp->next_node;
-		delete(tmp);
-		--size_;
+		if (head_.next_node != nullptr)
+		{
+			Node* tmp = head_.next_node;
+			head_.next_node = tmp->next_node;
+			delete(tmp);
+			--size_;
+		}
 	}
+	
 	void Clear()
 	{
 		Node* tmp;
